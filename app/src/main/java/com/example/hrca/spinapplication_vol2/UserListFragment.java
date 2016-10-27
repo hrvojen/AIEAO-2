@@ -3,10 +3,21 @@ package com.example.hrca.spinapplication_vol2;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.example.hrca.spinapplication_vol2.adapters.SearchAdapter;
+import com.example.hrca.spinapplication_vol2.adapters.UserListAdapter;
+import com.example.hrca.spinapplication_vol2.model.Food;
+
+import java.util.ArrayList;
 
 
 /**
@@ -26,6 +37,10 @@ public class UserListFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private UserListAdapter userListAdapter;
+    public static ListView mListView;
+    private ArrayList<Food> foodList=new ArrayList<>();
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -58,12 +73,32 @@ public class UserListFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+//        if (!(getFoodList().isEmpty())) {
+//            userListAdapter = new UserListAdapter(getActivity(), getFoodList());
+//            mListView.setAdapter(userListAdapter);
+//        }
+    }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        TextView mFoodName = (TextView) getActivity().findViewById(R.id.user_food_name);
+        TextView mBrand = (TextView) getActivity().findViewById(R.id.user_food_brand);
+        TextView mFoodDescription = (TextView) getActivity().findViewById(R.id.user_food_description);
+
+        mListView=(ListView)getActivity().findViewById(R.id.userFoodListView);
+
+
+
         return inflater.inflate(R.layout.fragment_user_list, container, false);
     }
 
@@ -72,6 +107,15 @@ public class UserListFragment extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
+        listViewConfigurations();
+        updateList();
+
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
@@ -91,6 +135,7 @@ public class UserListFragment extends Fragment {
         mListener = null;
     }
 
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -105,4 +150,31 @@ public class UserListFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    private void listViewConfigurations() {
+        userListAdapter.notifyDataSetChanged();
+            updateList();
+            userListAdapter = new UserListAdapter(getActivity(), foodList);
+        userListAdapter.notifyDataSetChanged();
+            mListView.setAdapter(userListAdapter);
+
+    }
+
+    public void setFood(ArrayList<Food> foodList){
+        this.foodList=foodList;
+
+    }
+
+    public ArrayList<Food> getFoodList(){
+        return foodList;
+    }
+
+    private void updateList() {
+        if (userListAdapter.getCount() == 0) {
+            mListView.setVisibility(View.GONE);
+        } else {
+            mListView.setVisibility(View.VISIBLE);
+        }
+    }
+
 }

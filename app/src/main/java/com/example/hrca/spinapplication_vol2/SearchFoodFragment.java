@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -14,6 +16,8 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -39,7 +43,7 @@ import java.util.ArrayList;
  * Use the {@link SearchFoodFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchFoodFragment extends Fragment {
+public class SearchFoodFragment extends Fragment{
 
     static boolean IS_SEARCH_VISIBLE; // retain list
     static boolean SEARCH_RETAIN; // retain search toolbar
@@ -53,7 +57,7 @@ public class SearchFoodFragment extends Fragment {
     private FatSecretSearch mFatSecretSearch;
     private FatSecretGet mFatSecretGet;
     private SearchAdapter mSearchAdapter;
-
+    private ImageButton addToListButton;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -65,6 +69,7 @@ public class SearchFoodFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
 
     public SearchFoodFragment() {
         // Required empty public constructor
@@ -122,6 +127,7 @@ public class SearchFoodFragment extends Fragment {
         mProgressSearch=(ProgressBar)getView().findViewById(R.id.progressBarSearch2);
         mProgressMore.setVisibility(View.INVISIBLE);
         mProgressSearch.setVisibility(View.INVISIBLE);
+        addToListButton=(ImageButton) getView().findViewById(R.id.buttonAddToList);
 
         mFatSecretSearch = new FatSecretSearch(); // method.search
         mFatSecretGet = new FatSecretGet(); // method.get
@@ -133,7 +139,14 @@ public class SearchFoodFragment extends Fragment {
 
         listViewConfigurations();
         updateList();
+
+
+
+
     }
+
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -158,6 +171,8 @@ public class SearchFoodFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
+
 
     /**
      * This interface must be implemented by activities that contain this
@@ -229,6 +244,10 @@ public class SearchFoodFragment extends Fragment {
                 }
             }
         });
+
+
+
+
     }
 
 
@@ -343,5 +362,8 @@ public class SearchFoodFragment extends Fragment {
             }
         }.execute();
     }
+
+
+
 
 }

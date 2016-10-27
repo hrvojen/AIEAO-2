@@ -131,5 +131,6 @@ public class FoodActivity extends AppCompatActivity implements SearchFoodFragmen
             return mFragmentTitleList.get(position);
         }
     }
+
 }
 
