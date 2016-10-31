@@ -23,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.hrca.spinapplication_vol2.adapters.DataTransferInterface;
 import com.example.hrca.spinapplication_vol2.adapters.SearchAdapter;
 import com.example.hrca.spinapplication_vol2.fatsecretimplementation.FatSecretGet;
 import com.example.hrca.spinapplication_vol2.fatsecretimplementation.FatSecretSearch;
@@ -58,6 +59,7 @@ public class SearchFoodFragment extends Fragment{
     private FatSecretGet mFatSecretGet;
     private SearchAdapter mSearchAdapter;
     private ImageButton addToListButton;
+    DataTransferInterface tdi;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -191,7 +193,7 @@ public class SearchFoodFragment extends Fragment{
 
     private void listViewConfigurations() {
         foodList = new ArrayList<>();
-        mSearchAdapter = new SearchAdapter(getActivity(), foodList);
+        mSearchAdapter = new SearchAdapter(getActivity(), foodList, tdi);
         mListView.setAdapter(mSearchAdapter);
     }
 

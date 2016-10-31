@@ -1,7 +1,9 @@
 package com.example.hrca.spinapplication_vol2.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.Image;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +14,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.hrca.spinapplication_vol2.FoodActivity;
 import com.example.hrca.spinapplication_vol2.R;
 import com.example.hrca.spinapplication_vol2.UserListFragment;
 import com.example.hrca.spinapplication_vol2.model.Food;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by hrca on 13.10.2016..
@@ -25,14 +31,16 @@ import java.util.List;
 
 
 public class SearchAdapter extends ArrayAdapter<Food> {
-
+    DataTransferInterface dtInterface;
     public static ArrayList<Food> myFoodList=new ArrayList<>();
     private final Context mContext;
     private final ArrayList<Food> mItem;
     private UserListAdapter userListAdapter;
-    public SearchAdapter(Context context, ArrayList<Food> itemsArrayList) {
+
+    public SearchAdapter(Context context, ArrayList<Food> itemsArrayList, DataTransferInterface dtInterface) {
         super(context, R.layout.search_row, itemsArrayList);
         this.mContext = context;
+        this.dtInterface = dtInterface;
         this.mItem = itemsArrayList;
     }
 
@@ -40,7 +48,7 @@ public class SearchAdapter extends ArrayAdapter<Food> {
 
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, final View convertView, final ViewGroup parent) {
 
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.search_row, parent, false);
@@ -50,6 +58,7 @@ public class SearchAdapter extends ArrayAdapter<Food> {
         ImageButton addToMyListButton=(ImageButton)v.findViewById(R.id.buttonAddToList);
 //        addToMyListButton.setTag(position);
         final int position2=position;
+
         addToMyListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,8 +66,13 @@ public class SearchAdapter extends ArrayAdapter<Food> {
                 Food food=new Food(mItem.get(position2).getFoodName(),mItem.get(position2).getDescription(),mItem.get(position2).getBrand()," ");
                 myFoodList.add(food);
                 Log.d("String_tag", food.toString());
-                UserListFragment ulf=new UserListFragment();
-                ulf.setFood(myFoodList);
+                if (mContext instanceof FoodActivity){
+                    ((FoodActivity) mContext).setValues(myFoodList);
+                  //((FoodActivity) mContext).onFragmentInteraction(UserListFragment.class);
+                    ((FoodActivity) mContext).onArticleSelected(position);
+
+
+                }
 
             }
         });
@@ -81,10 +95,5 @@ public class SearchAdapter extends ArrayAdapter<Food> {
 //        }
 //    };
 
-
-
-    public List<Food> getList() {
-        return myFoodList;
-    }
 
 }

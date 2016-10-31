@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -12,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,10 +22,14 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import com.example.hrca.spinapplication_vol2.adapters.DataTransferInterface;
+import com.example.hrca.spinapplication_vol2.adapters.UserListAdapter;
+import com.example.hrca.spinapplication_vol2.model.Food;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class FoodActivity extends AppCompatActivity implements SearchFoodFragment.OnFragmentInteractionListener, UserListFragment.OnFragmentInteractionListener{
+public class FoodActivity extends AppCompatActivity implements SearchFoodFragment.OnFragmentInteractionListener, UserListFragment.OnFragmentInteractionListener, DataTransferInterface, UserListFragment.OnHeadlineSelectedListener{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -38,6 +44,7 @@ public class FoodActivity extends AppCompatActivity implements SearchFoodFragmen
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private ArrayList<Food> foodArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +108,47 @@ public class FoodActivity extends AppCompatActivity implements SearchFoodFragmen
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+//        UserListFragment userListFragment=(UserListFragment)getSupportFragmentManager().findFragmentById()
+
+        Log.d("Number of items: ", " "+foodArrayList.size());
+
+
+        if(foodArrayList != null) {
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            Fragment fragment = UserListFragment.newInstance(foodArrayList);
+            Log.d("Number of items: ", " "+foodArrayList.size());
+            ft.add(fragment,"TAG");
+            ft.commit();
+        }
+    }
+
+    @Override
+    public void setValues(ArrayList<Food> arrayListFood) {
+        foodArrayList=new ArrayList<>();
+        foodArrayList.addAll(arrayListFood);
+
+        for (Food food:foodArrayList
+             ) {
+            Log.d("TAG_USER_LISST", food.getDescription());
+        }
+    }
+
+    @Override
+    public ArrayList<Food> getValues() {
+        return foodArrayList;
+    }
+
+    @Override
+    public void onArticleSelected(int position) {
+        if(foodArrayList != null) {
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            Fragment fragment = UserListFragment.newInstance(foodArrayList);
+            Log.d("Number of items: ", " "+foodArrayList.size());
+            ft.add(fragment,"TAG");
+            ft.commit();
+        }
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -131,6 +179,7 @@ public class FoodActivity extends AppCompatActivity implements SearchFoodFragmen
             return mFragmentTitleList.get(position);
         }
     }
+
 
 }
 

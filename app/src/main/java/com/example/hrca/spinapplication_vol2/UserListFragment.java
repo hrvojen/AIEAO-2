@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,30 +39,46 @@ public class UserListFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private UserListAdapter userListAdapter;
-    public static ListView mListView;
+    public ListView mListView;
     private ArrayList<Food> foodList=new ArrayList<>();
-
+    private static final String FOOD_KEY = "food_key";
 
     private OnFragmentInteractionListener mListener;
+    OnHeadlineSelectedListener mCallback;
+
+
+    public interface OnHeadlineSelectedListener {
+        public void onArticleSelected(int position);
+    }
+
 
     public UserListFragment() {
         // Required empty public constructor
     }
 
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+//     * @param param1 Parameter 1.
+//     * @param param2 Parameter 2.
      * @return A new instance of fragment UserListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static UserListFragment newInstance(String param1, String param2) {
+//    public static UserListFragment newInstance(String param1, String param2) {
+//        UserListFragment fragment = new UserListFragment();
+//        Bundle args = new Bundle();
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
+
+    public static UserListFragment newInstance(ArrayList <Food> foodItems) {
         UserListFragment fragment = new UserListFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putSerializable(FOOD_KEY, foodItems);
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,19 +87,17 @@ public class UserListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+//            mParam1 = getArguments().getString(ARG_PARAM1);
+//            mParam2 = getArguments().getString(ARG_PARAM2);
+            foodList= (ArrayList<Food>) getArguments().getSerializable(FOOD_KEY);
+            System.out.println(foodList.size());
         }
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
-//        if (!(getFoodList().isEmpty())) {
-//            userListAdapter = new UserListAdapter(getActivity(), getFoodList());
-//            mListView.setAdapter(userListAdapter);
-//        }
+//        userListAdapter.notifyDataSetChanged();
     }
 
 
@@ -91,15 +106,10 @@ public class UserListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        TextView mFoodName = (TextView) getActivity().findViewById(R.id.user_food_name);
-        TextView mBrand = (TextView) getActivity().findViewById(R.id.user_food_brand);
-        TextView mFoodDescription = (TextView) getActivity().findViewById(R.id.user_food_description);
 
-        mListView=(ListView)getActivity().findViewById(R.id.userFoodListView);
+        View view=inflater.inflate(R.layout.fragment_user_list, container, false);
 
-
-
-        return inflater.inflate(R.layout.fragment_user_list, container, false);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -111,23 +121,45 @@ public class UserListFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-
-        listViewConfigurations();
-        updateList();
-
         super.onViewCreated(view, savedInstanceState);
+
+        mListView=(ListView)getView().findViewById(R.id.userFoodListView);
+
+        TextView mFoodName = (TextView) getView().findViewById(R.id.user_food_name);
+        TextView mBrand = (TextView) getView().findViewById(R.id.user_food_brand);
+        TextView mFoodDescription = (TextView) getView().findViewById(R.id.user_food_description);
+
+        if(foodList.size()!=0) {
+            listViewConfigurations();
+            updateList();
+        }
     }
+
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(context);
+//        if (context instanceof OnFragmentInteractionListener) {
+//            mListener = (OnFragmentInteractionListener) context;
+//            Log.d("TAG_USER_LIST", "onAttachPozvana");
+//        } else {
+//            throw new RuntimeException(context.toString()
+//                    + " must implement OnFragmentInteractionListener");
+//        }
+//    }
+
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+        try {
+            mCallback = (OnHeadlineSelectedListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnHeadlineSelectedListener");
         }
+
     }
+
 
     @Override
     public void onDetach() {
@@ -151,12 +183,20 @@ public class UserListFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+
+
     private void listViewConfigurations() {
+        Log.d("TAG_USER_LIST", "config");
+
+        for (Food food:foodList
+                ) {
+            Log.d("Hol-up", " "+food.getDescription());
+        }
+        userListAdapter = new UserListAdapter(getActivity(), foodList);
+        mListView.setAdapter(userListAdapter);
         userListAdapter.notifyDataSetChanged();
-            updateList();
-            userListAdapter = new UserListAdapter(getActivity(), foodList);
-        userListAdapter.notifyDataSetChanged();
-            mListView.setAdapter(userListAdapter);
+        Log.d("TAG_USER_LIST", "config-inner");
+
 
     }
 
@@ -165,15 +205,14 @@ public class UserListFragment extends Fragment {
 
     }
 
-    public ArrayList<Food> getFoodList(){
-        return foodList;
-    }
-
     private void updateList() {
         if (userListAdapter.getCount() == 0) {
+            Log.d("TAG_GONE", "Cant see");
             mListView.setVisibility(View.GONE);
         } else {
             mListView.setVisibility(View.VISIBLE);
+            Log.d("TAG_SHOW", "Can see");
+
         }
     }
 
