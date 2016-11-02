@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="100dp">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:layout_marginLeft="16dp"
             android:gravity="center_vertical"
@@ -20,49 +20,33 @@
 
             <TextView
                 android:id="@+id/user_food_name"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:textColor="@android:color/background_dark"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                android:text="dummy" />
 
             <TextView
                 android:id="@+id/user_food_description"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingRight="16dp"
-                android:layout_below="@+id/label"
                 android:textColor="@android:color/background_dark"
-                android:textSize="12sp"/>
+                android:textSize="12sp"
+                android:text="dummy" />
 
             <TextView
                 android:id="@+id/user_food_brand"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/food_name"
                 android:textColor="@android:color/background_dark"
-                android:textSize="14sp"/>
+                android:textSize="14sp"
+                android:text="dummy" />
 
-
-
-
-            <!--android:singleLine="true"-->
-
-
-            <!--android:singleLine="true"-->
 
         </LinearLayout>
 
-        <ImageButton
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_menu_manage"
-            android:id="@+id/user_buttonAddToList"
-            android:layout_weight="1"
-            android:layout_marginTop="10dp"
-            android:layout_width="120dp"
-            android:background="#00000000"
-            android:onClick="user_myClickHandler"/>
-
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

@@ -302,6 +302,7 @@ public class SearchFoodFragment extends Fragment{
                 if (result.equals("Error"))
                     Toast.makeText(getActivity().getBaseContext(), "No Items Containing Your Search", Toast.LENGTH_SHORT).show();
                 mSearchAdapter.notifyDataSetChanged();
+                mSearchAdapter.getCount();
                 updateList();
                  mProgressMore.setVisibility(View.INVISIBLE);
                  mProgressSearch.setVisibility(View.INVISIBLE);

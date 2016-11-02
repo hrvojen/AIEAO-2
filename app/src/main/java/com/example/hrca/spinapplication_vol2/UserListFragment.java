@@ -1,7 +1,9 @@
 package com.example.hrca.spinapplication_vol2;
 
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -42,6 +44,7 @@ public class UserListFragment extends Fragment {
     public ListView mListView;
     private ArrayList<Food> foodList=new ArrayList<>();
     private static final String FOOD_KEY = "food_key";
+    private ArrayList<Food> tempArrayList;
 
     private OnFragmentInteractionListener mListener;
     OnHeadlineSelectedListener mCallback;
@@ -89,8 +92,18 @@ public class UserListFragment extends Fragment {
         if (getArguments() != null) {
 //            mParam1 = getArguments().getString(ARG_PARAM1);
 //            mParam2 = getArguments().getString(ARG_PARAM2);
-            foodList= (ArrayList<Food>) getArguments().getSerializable(FOOD_KEY);
+
+//            foodList= (ArrayList<Food>) getArguments().getSerializable(FOOD_KEY);
+            foodList.addAll((ArrayList<Food>) getArguments().getSerializable(FOOD_KEY));
+
             System.out.println(foodList.size());
+
+            if(!(foodList.equals(null))) {
+                userListAdapter = new UserListAdapter(getActivity(), (ArrayList<Food>) getArguments().getSerializable(FOOD_KEY));
+                userListAdapter.getCount();
+                Log.e("GET COUNT VALUE", ""+userListAdapter.getCount());
+            }
+
         }
     }
 
@@ -98,6 +111,10 @@ public class UserListFragment extends Fragment {
     public void onResume() {
         super.onResume();
 //        userListAdapter.notifyDataSetChanged();
+//        if (!(foodList.isEmpty())) {
+//            userListAdapter.swapItems(foodList);
+//            Log.e("GET COUNT-On resume", ""+userListAdapter.getCount());
+//        }
     }
 
 
@@ -116,6 +133,7 @@ public class UserListFragment extends Fragment {
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
+
         }
     }
 
@@ -125,27 +143,21 @@ public class UserListFragment extends Fragment {
 
         mListView=(ListView)getView().findViewById(R.id.userFoodListView);
 
-        TextView mFoodName = (TextView) getView().findViewById(R.id.user_food_name);
-        TextView mBrand = (TextView) getView().findViewById(R.id.user_food_brand);
-        TextView mFoodDescription = (TextView) getView().findViewById(R.id.user_food_description);
+//        TextView mFoodName = (TextView) getView().findViewById(R.id.user_food_name);
+//        TextView mBrand = (TextView) getView().findViewById(R.id.user_food_brand);
+//        TextView mFoodDescription = (TextView) getView().findViewById(R.id.user_food_description);
 
-        if(foodList.size()!=0) {
-            listViewConfigurations();
+        if (!(foodList.isEmpty())){
+
+
+            mListView.setAdapter(userListAdapter);
+            Log.e("GET oncreated", ""+userListAdapter.getCount());
+            mListView.setVisibility(View.VISIBLE);
+
             updateList();
         }
-    }
 
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//            Log.d("TAG_USER_LIST", "onAttachPozvana");
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
+    }
 
 
     @Override
@@ -188,22 +200,20 @@ public class UserListFragment extends Fragment {
     private void listViewConfigurations() {
         Log.d("TAG_USER_LIST", "config");
 
-        for (Food food:foodList
-                ) {
-            Log.d("Hol-up", " "+food.getDescription());
-        }
         userListAdapter = new UserListAdapter(getActivity(), foodList);
+        userListAdapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                Log.d("Foobar", " "+userListAdapter.getCount());
+            }
+        });
         mListView.setAdapter(userListAdapter);
-        userListAdapter.notifyDataSetChanged();
         Log.d("TAG_USER_LIST", "config-inner");
 
 
     }
 
-    public void setFood(ArrayList<Food> foodList){
-        this.foodList=foodList;
-
-    }
 
     private void updateList() {
         if (userListAdapter.getCount() == 0) {
@@ -214,6 +224,29 @@ public class UserListFragment extends Fragment {
             Log.d("TAG_SHOW", "Can see");
 
         }
+    }
+
+    private class AcyncClass extends AsyncTask<String, String, String>{
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            userListAdapter.notifyDataSetChanged();
+            updateList();
+            return "do in bckg executed";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+
+        }
+
+
     }
 
 }

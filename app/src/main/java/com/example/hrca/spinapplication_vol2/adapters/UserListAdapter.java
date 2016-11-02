@@ -1,7 +1,6 @@
 package com.example.hrca.spinapplication_vol2.adapters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,17 +19,22 @@ import java.util.ArrayList;
 public class UserListAdapter extends ArrayAdapter<Food> {
 
     private final Context mContext;
-    private final ArrayList<Food> userFoodList;
-    private UserListAdapter userListAdapter;
+    private ArrayList<Food> userFoodList = new ArrayList<>();
+    private ArrayList<Food> mItems=new ArrayList<>();
 
     public UserListAdapter(Context mContext, ArrayList<Food> userFoodList) {
-        super(mContext, R.layout.user_list_row);
+        super(mContext, R.layout.user_list_row, userFoodList);
         this.mContext = mContext;
-        this.userFoodList = userFoodList;
+        this.mItems.addAll(userFoodList);
+    }
+
+    public void swapItems(ArrayList<Food> foodItems) {
+        this.mItems = foodItems;
+        notifyDataSetChanged();
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, final View convertView, final ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.user_list_row, parent, false);
 
@@ -39,17 +43,21 @@ public class UserListAdapter extends ArrayAdapter<Food> {
         TextView mBrand = (TextView) v.findViewById(R.id.user_food_brand);
         TextView mFoodDescription = (TextView) v.findViewById(R.id.user_food_description);
 
-        mFoodName.setText(userFoodList.get(position).getFoodName());
-        mFoodDescription.setText(userFoodList.get(position).getDescription());
-        mBrand.setText(userFoodList.get(position).getBrand());
+        mFoodName.setText(mItems.get(position).getFoodName());
+        mFoodDescription.setText(mItems.get(position).getDescription());
+        mBrand.setText(mItems.get(position).getBrand());
         return v;
 
 
     }
 
+    @Override
+    public int getCount() {
+        return mItems.size();
+    }
 
-    public void AddItem(Food food){
-        if(null != food){
+    public void AddItem(Food food) {
+        if (null != food) {
             userFoodList.add(food);
         }
     }
