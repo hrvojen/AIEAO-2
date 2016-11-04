@@ -5,6 +5,7 @@ import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -16,9 +17,13 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.hrca.spinapplication_vol2.adapters.DataTransferInterface;
 import com.example.hrca.spinapplication_vol2.adapters.SearchAdapter;
+import com.example.hrca.spinapplication_vol2.adapters.Updateable;
 import com.example.hrca.spinapplication_vol2.adapters.UserListAdapter;
 import com.example.hrca.spinapplication_vol2.model.Food;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -31,7 +36,7 @@ import java.util.ArrayList;
  * Use the {@link UserListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class UserListFragment extends Fragment {
+public class UserListFragment extends Fragment implements DataTransferInterface {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -45,9 +50,32 @@ public class UserListFragment extends Fragment {
     private ArrayList<Food> foodList=new ArrayList<>();
     private static final String FOOD_KEY = "food_key";
     private ArrayList<Food> tempArrayList;
-
+    private TextView dummyTextView;
     private OnFragmentInteractionListener mListener;
     OnHeadlineSelectedListener mCallback;
+
+
+    @Override
+    public void setValues(ArrayList<Food> arrayList) {
+        foodList.addAll(arrayList);
+
+        userListAdapter = new UserListAdapter(getActivity(), foodList);
+        userListAdapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                Log.d("Foobar", " "+userListAdapter.getCount());
+            }
+        });
+        mListView.setAdapter(userListAdapter);
+        Log.d("TAG_USER_LIST", "config-inner");
+        updateList();
+    }
+
+    @Override
+    public ArrayList<Food> getValues() {
+        return null;
+    }
 
 
     public interface OnHeadlineSelectedListener {
@@ -94,9 +122,15 @@ public class UserListFragment extends Fragment {
 //            mParam2 = getArguments().getString(ARG_PARAM2);
 
 //            foodList= (ArrayList<Food>) getArguments().getSerializable(FOOD_KEY);
-            foodList.addAll((ArrayList<Food>) getArguments().getSerializable(FOOD_KEY));
 
-            System.out.println(foodList.size());
+
+
+            if((ArrayList<Food>) getArguments().getSerializable(FOOD_KEY) != null) {
+                foodList.addAll((ArrayList<Food>) getArguments().getSerializable(FOOD_KEY));
+                System.out.println(foodList.size());
+            }
+
+
 
             if(!(foodList.equals(null))) {
                 userListAdapter = new UserListAdapter(getActivity(), (ArrayList<Food>) getArguments().getSerializable(FOOD_KEY));
@@ -110,8 +144,7 @@ public class UserListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-//        userListAdapter.notifyDataSetChanged();
-//        if (!(foodList.isEmpty())) {
+        //        if (!(foodList.isEmpty())) {
 //            userListAdapter.swapItems(foodList);
 //            Log.e("GET COUNT-On resume", ""+userListAdapter.getCount());
 //        }
@@ -126,6 +159,9 @@ public class UserListFragment extends Fragment {
 
         View view=inflater.inflate(R.layout.fragment_user_list, container, false);
 
+        mListView=(ListView)view.findViewById(R.id.userFoodListView);
+
+
         return view;
     }
 
@@ -137,25 +173,17 @@ public class UserListFragment extends Fragment {
         }
     }
 
+
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        mListView=(ListView)getView().findViewById(R.id.userFoodListView);
 
 //        TextView mFoodName = (TextView) getView().findViewById(R.id.user_food_name);
 //        TextView mBrand = (TextView) getView().findViewById(R.id.user_food_brand);
 //        TextView mFoodDescription = (TextView) getView().findViewById(R.id.user_food_description);
 
-        if (!(foodList.isEmpty())){
 
-
-            mListView.setAdapter(userListAdapter);
-            Log.e("GET oncreated", ""+userListAdapter.getCount());
-            mListView.setVisibility(View.VISIBLE);
-
-            updateList();
-        }
 
     }
 
@@ -197,10 +225,10 @@ public class UserListFragment extends Fragment {
 
 
 
-    private void listViewConfigurations() {
+    public void listViewConfigurations(ArrayList<Food> tmpFoodList) {
         Log.d("TAG_USER_LIST", "config");
 
-        userListAdapter = new UserListAdapter(getActivity(), foodList);
+        userListAdapter = new UserListAdapter(getActivity(), tmpFoodList);
         userListAdapter.registerDataSetObserver(new DataSetObserver() {
             @Override
             public void onChanged() {
@@ -234,6 +262,22 @@ public class UserListFragment extends Fragment {
 
         @Override
         protected String doInBackground(String... params) {
+
+            // Get a handler that can be used to post to the main thread
+            Handler mainHandler = new Handler(getActivity().getMainLooper());
+
+            Runnable myRunnable = new Runnable() {
+                String tempStr=foodList.get(0).getFoodName().toString();
+
+                @Override
+                public void run() {
+                    dummyTextView.setText(tempStr);
+
+                } // This is your code
+            };
+            mainHandler.post(myRunnable);
+
+
             userListAdapter.notifyDataSetChanged();
             updateList();
             return "do in bckg executed";
@@ -242,7 +286,8 @@ public class UserListFragment extends Fragment {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-
+            String tempStr=foodList.get(0).getFoodName().toString();
+            dummyTextView.setText(tempStr);
 
         }
 

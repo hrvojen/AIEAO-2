@@ -23,13 +23,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.hrca.spinapplication_vol2.adapters.DataTransferInterface;
+import com.example.hrca.spinapplication_vol2.adapters.SearchAdapter;
 import com.example.hrca.spinapplication_vol2.adapters.UserListAdapter;
 import com.example.hrca.spinapplication_vol2.model.Food;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FoodActivity extends AppCompatActivity implements SearchFoodFragment.OnFragmentInteractionListener, UserListFragment.OnFragmentInteractionListener, DataTransferInterface, UserListFragment.OnHeadlineSelectedListener{
+
+
+public class FoodActivity extends AppCompatActivity implements SearchFoodFragment.OnFragmentInteractionListener, UserListFragment.OnFragmentInteractionListener, DataTransferInterface, UserListFragment.OnHeadlineSelectedListener, View.OnClickListener{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -44,8 +47,8 @@ public class FoodActivity extends AppCompatActivity implements SearchFoodFragmen
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private ViewPagerAdapter adapter;
     private ArrayList<Food> foodArrayList;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +63,7 @@ public class FoodActivity extends AppCompatActivity implements SearchFoodFragmen
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         setupViewPager(mViewPager);
+        mViewPager.setOffscreenPageLimit(2);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -83,6 +87,20 @@ public class FoodActivity extends AppCompatActivity implements SearchFoodFragmen
         return true;
     }
 
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == R.id.buttonAddToList) {
+            notifyViewPagerDataSetChanged();
+        }
+    }
+
+    private void notifyViewPagerDataSetChanged() {
+        Log.d("TAG", "\nnotifyDataSetChanged()");
+        adapter.notifyDataSetChanged();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -99,7 +117,7 @@ public class FoodActivity extends AppCompatActivity implements SearchFoodFragmen
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new SearchFoodFragment(), "ONE");
         adapter.addFragment(new UserListFragment(), "TWO");
         viewPager.setAdapter(adapter);
@@ -110,26 +128,26 @@ public class FoodActivity extends AppCompatActivity implements SearchFoodFragmen
 
 //        UserListFragment userListFragment=(UserListFragment)getSupportFragmentManager().findFragmentById()
 
-        Log.d("Number of items: ", " "+foodArrayList.size());
-
-
-        if(foodArrayList != null) {
-
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            Fragment fragment = UserListFragment.newInstance(foodArrayList);
-            Log.d("Number of items: ", " "+foodArrayList.size());
-            ft.add(fragment,"TAG");
-            ft.commit();
-        }
+//        Log.d("Number of items: ", " "+foodArrayList.size());
+//
+//
+//        if(foodArrayList != null) {
+//
+//            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//            Fragment fragment = UserListFragment.newInstance(foodArrayList);
+//            Log.d("Number of items: ", " "+foodArrayList.size());
+//            ft.add(fragment,"TAG");
+//            ft.commit();
+//        }
     }
 
     @Override
     public void setValues(ArrayList<Food> arrayListFood) {
         foodArrayList=new ArrayList<>();
         foodArrayList.addAll(arrayListFood);
-
+        mViewPager.getAdapter().notifyDataSetChanged();
         for (Food food:foodArrayList
-             ) {
+                ) {
             Log.d("TAG_USER_LISST", food.getDescription());
         }
     }
@@ -141,19 +159,34 @@ public class FoodActivity extends AppCompatActivity implements SearchFoodFragmen
 
     @Override
     public void onArticleSelected(int position) {
-        if(foodArrayList != null) {
 
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            Fragment fragment = UserListFragment.newInstance(foodArrayList);
-            Log.d("Number of items: ", " "+foodArrayList.size());
-            ft.add(fragment,"TAG");
-            ft.commit();
-        }
+//        if(foodArrayList != null) {
+//
+//            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//            Fragment fragment = UserListFragment.newInstance(foodArrayList);
+//            Log.d("Number of items: ", " "+foodArrayList.size());
+//            ft.add(fragment,"TAG");
+//            ft.commit();
+//        }
+
     }
+
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        @Override
+        public int getItemPosition(Object object) {
+
+
+            if (object instanceof UserListFragment) {
+                ((UserListFragment) object).listViewConfigurations(foodArrayList);
+            }
+            //don't return POSITION_NONE, avoid fragment recreation.
+            return super.getItemPosition(object);
+
+        }
 
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager);
@@ -161,6 +194,7 @@ public class FoodActivity extends AppCompatActivity implements SearchFoodFragmen
 
         @Override
         public Fragment getItem(int position) {
+//  item
             return mFragmentList.get(position);
         }
 
@@ -180,6 +214,18 @@ public class FoodActivity extends AppCompatActivity implements SearchFoodFragmen
         }
     }
 
+    private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageSelected(int position) {
+            Log.d("TAG", "\nonPageSelected(" + position + ")");
+            notifyViewPagerDataSetChanged();
+        }
 
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+
+        @Override
+        public void onPageScrollStateChanged(int state) {}
+    };
 }
 
