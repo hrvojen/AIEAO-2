@@ -201,7 +201,7 @@ public class SearchFoodFragment extends Fragment{
         mSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == 6) {
+                if (actionId == 6 || actionId == 5) {
                     foodList.clear();
                     //EditorInfo.IME_ACTION_SEARCH
                     InputMethodManager inputManager = (InputMethodManager) getActivity().getBaseContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -220,7 +220,7 @@ public class SearchFoodFragment extends Fragment{
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position < foodList.size()) { // Should to be refactored
+                if (position < foodList.size()) {
                     getFood(Long.valueOf(foodList.get(position - 1).getID()));
                 } else {
                     if (foodList.size() == 20)

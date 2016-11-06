@@ -1,12 +1,14 @@
 package com.example.hrca.spinapplication_vol2;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -183,7 +185,15 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
 //        TextView mBrand = (TextView) getView().findViewById(R.id.user_food_brand);
 //        TextView mFoodDescription = (TextView) getView().findViewById(R.id.user_food_description);
 
+        FloatingActionButton floatingButtonProceed= (FloatingActionButton)getView().findViewById(R.id.floatingProceedToSave);
 
+        floatingButtonProceed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent saveListActivity=new Intent(getActivity(), SaveListOfGroceries.class);
+                startActivity(saveListActivity);
+            }
+        });
 
     }
 
