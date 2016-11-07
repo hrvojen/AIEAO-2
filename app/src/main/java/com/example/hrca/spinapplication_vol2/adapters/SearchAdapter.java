@@ -62,14 +62,22 @@ public class SearchAdapter extends ArrayAdapter<Food> {
         addToMyListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Log.d("TAG_BUTTON", mItem.get(position2).getFoodName());
                 Food food=new Food(mItem.get(position2).getFoodName(),mItem.get(position2).getDescription(),mItem.get(position2).getBrand()," ");
                 myFoodList.add(food);
                 Log.d("String_tag", food.toString());
                 if (mContext instanceof FoodActivity){
+
+
                     ((FoodActivity) mContext).setValues(myFoodList);
+
+
+//                    ((FoodActivity) mContext).addFoodToArrayList(food);
+                    notifyDataSetChanged();
                   //((FoodActivity) mContext).onFragmentInteraction(UserListFragment.class);
                     ((FoodActivity) mContext).onArticleSelected(position);
+
 
 
                 }

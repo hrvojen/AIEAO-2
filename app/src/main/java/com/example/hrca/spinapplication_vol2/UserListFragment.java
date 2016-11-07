@@ -12,22 +12,32 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.SparseBooleanArray;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.hrca.spinapplication_vol2.adapters.DataTransferInterface;
 import com.example.hrca.spinapplication_vol2.adapters.SearchAdapter;
 import com.example.hrca.spinapplication_vol2.adapters.Updateable;
 import com.example.hrca.spinapplication_vol2.adapters.UserListAdapter;
 import com.example.hrca.spinapplication_vol2.model.Food;
+import com.github.brnunes.swipeablerecyclerview.SwipeableRecyclerViewTouchListener;
 
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -55,23 +65,32 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
     private TextView dummyTextView;
     private OnFragmentInteractionListener mListener;
     OnHeadlineSelectedListener mCallback;
+    RecyclerView recyclerView;
 
 
     @Override
     public void setValues(ArrayList<Food> arrayList) {
         foodList.addAll(arrayList);
 
-        userListAdapter = new UserListAdapter(getActivity(), foodList);
-        userListAdapter.registerDataSetObserver(new DataSetObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-                Log.d("Foobar", " "+userListAdapter.getCount());
-            }
-        });
-        mListView.setAdapter(userListAdapter);
-        Log.d("TAG_USER_LIST", "config-inner");
-        updateList();
+
+
+
+
+//
+//        userListAdapter = new UserListAdapter(getActivity(), foodList);
+//        userListAdapter.registerDataSetObserver(new DataSetObserver() {
+//            @Override
+//            public void onChanged() {
+//                super.onChanged();
+//                Log.d("Foobar", " "+userListAdapter.getCount());
+//            }
+//        });
+//        mListView.setAdapter(userListAdapter);
+//        Log.d("TAG_USER_LIST", "config-inner");
+//
+//
+//
+//        updateList();
     }
 
     @Override
@@ -79,6 +98,10 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
         return null;
     }
 
+    @Override
+    public void addFoodToArrayList(Food food) {
+
+    }
 
     public interface OnHeadlineSelectedListener {
         public void onArticleSelected(int position);
@@ -88,25 +111,6 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
     public UserListFragment() {
         // Required empty public constructor
     }
-
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-//     * @param param1 Parameter 1.
-//     * @param param2 Parameter 2.
-     * @return A new instance of fragment UserListFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-//    public static UserListFragment newInstance(String param1, String param2) {
-//        UserListFragment fragment = new UserListFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
 
     public static UserListFragment newInstance(ArrayList <Food> foodItems) {
         UserListFragment fragment = new UserListFragment();
@@ -120,12 +124,6 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-
-//            foodList= (ArrayList<Food>) getArguments().getSerializable(FOOD_KEY);
-
-
 
             if((ArrayList<Food>) getArguments().getSerializable(FOOD_KEY) != null) {
                 foodList.addAll((ArrayList<Food>) getArguments().getSerializable(FOOD_KEY));
@@ -146,10 +144,6 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
     @Override
     public void onResume() {
         super.onResume();
-        //        if (!(foodList.isEmpty())) {
-//            userListAdapter.swapItems(foodList);
-//            Log.e("GET COUNT-On resume", ""+userListAdapter.getCount());
-//        }
     }
 
 
@@ -159,9 +153,11 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
+// **************************
         View view=inflater.inflate(R.layout.fragment_user_list, container, false);
 
         mListView=(ListView)view.findViewById(R.id.userFoodListView);
+//***************************
 
 
         return view;
@@ -194,6 +190,9 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
                 startActivity(saveListActivity);
             }
         });
+
+
+
 
     }
 
@@ -236,6 +235,7 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
 
 
     public void listViewConfigurations(ArrayList<Food> tmpFoodList) {
+//        ******************
         Log.d("TAG_USER_LIST", "config");
 
         userListAdapter = new UserListAdapter(getActivity(), tmpFoodList);
@@ -247,7 +247,70 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
             }
         });
         mListView.setAdapter(userListAdapter);
+
+        mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+
+        mListView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+                final int checkedCount = mListView.getCheckedItemCount();
+                mode.setTitle(checkedCount + " Selected");
+                userListAdapter.toggleSelection(position);
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                mode.getMenuInflater().inflate(R.menu.user_list_, menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.delete:
+                        // Calls getSelectedIds method from ListViewAdapter Class
+                        SparseBooleanArray selected = userListAdapter
+                                .getSelectedIds();
+                        // Captures all selected ids with a loop
+                        for (int i = (selected.size() - 1); i >= 0; i--) {
+                            if (selected.valueAt(i)) {
+                                Food selectedFood = userListAdapter
+                                        .getItem(selected.keyAt(i));
+                                // Remove selected items following the ids
+                                userListAdapter.remove(selectedFood);
+
+                                for (Food food:userListAdapter.getUserFoodList()
+                                     ) {
+                                    Log.e("Leftover items are: ", food.getFoodName());
+                                }
+
+                                FoodActivity foodActivity=(FoodActivity) getActivity();
+                                foodActivity.setValues(userListAdapter.getUserFoodList());
+
+                            }
+                        }
+                        // Close CAB
+                        mode.finish();
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                userListAdapter.removeSelection();
+            }
+        });
+
         Log.d("TAG_USER_LIST", "config-inner");
+//*******************
+
 
 
     }
@@ -264,44 +327,5 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
         }
     }
 
-    private class AcyncClass extends AsyncTask<String, String, String>{
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            // Get a handler that can be used to post to the main thread
-            Handler mainHandler = new Handler(getActivity().getMainLooper());
-
-            Runnable myRunnable = new Runnable() {
-                String tempStr=foodList.get(0).getFoodName().toString();
-
-                @Override
-                public void run() {
-                    dummyTextView.setText(tempStr);
-
-                } // This is your code
-            };
-            mainHandler.post(myRunnable);
-
-
-            userListAdapter.notifyDataSetChanged();
-            updateList();
-            return "do in bckg executed";
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            String tempStr=foodList.get(0).getFoodName().toString();
-            dummyTextView.setText(tempStr);
-
-        }
-
-
-    }
 
 }

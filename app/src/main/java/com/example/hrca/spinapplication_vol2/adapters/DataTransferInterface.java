@@ -15,4 +15,6 @@ public interface DataTransferInterface {
     public void setValues(ArrayList<Food> arrayList);
 
     public ArrayList<Food> getValues();
+
+    public void addFoodToArrayList(Food food);
 }

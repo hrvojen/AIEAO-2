@@ -79,6 +79,11 @@ public class FoodActivity extends AppCompatActivity implements SearchFoodFragmen
         return true;
     }
 
+    @Override
+    public void addFoodToArrayList(Food food) {
+        foodArrayList.add(food);
+        mViewPager.getAdapter().notifyDataSetChanged();
+    }
 
     @Override
     public void onClick(View v) {
