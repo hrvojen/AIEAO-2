@@ -1,6 +1,7 @@
 package com.example.hrca.spinapplication_vol2;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.net.Uri;
@@ -12,6 +13,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -23,7 +25,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,9 +36,12 @@ import com.example.hrca.spinapplication_vol2.adapters.DataTransferInterface;
 import com.example.hrca.spinapplication_vol2.adapters.SearchAdapter;
 import com.example.hrca.spinapplication_vol2.adapters.Updateable;
 import com.example.hrca.spinapplication_vol2.adapters.UserListAdapter;
+import com.example.hrca.spinapplication_vol2.fatsecretimplementation.FatSecretGet;
 import com.example.hrca.spinapplication_vol2.model.Food;
 import com.github.brnunes.swipeablerecyclerview.SwipeableRecyclerViewTouchListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -66,6 +74,8 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
     private OnFragmentInteractionListener mListener;
     OnHeadlineSelectedListener mCallback;
     RecyclerView recyclerView;
+    private EditText editTextNumberOfUnits;
+    private FatSecretGet mFatSecretGet;
 
 
     @Override
@@ -151,13 +161,10 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
-// **************************
         View view=inflater.inflate(R.layout.fragment_user_list, container, false);
 
         mListView=(ListView)view.findViewById(R.id.userFoodListView);
-//***************************
 
 
         return view;
@@ -191,6 +198,7 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
             }
         });
 
+        mFatSecretGet = new FatSecretGet();
 
 
 
@@ -234,9 +242,43 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
 
 
 
-    public void listViewConfigurations(ArrayList<Food> tmpFoodList) {
+    public void listViewConfigurations(final ArrayList<Food> tmpFoodList) {
 //        ******************
         Log.d("TAG_USER_LIST", "config");
+
+
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+                final View dialogView = inflater.inflate(R.layout.dialog_user_list_item, null);
+                dialogBuilder.setView(dialogView);
+
+                Spinner spinnerUnits=(Spinner)getActivity().findViewById(R.id.spinnerOfUnits);
+
+                dialogBuilder.setTitle(tmpFoodList.get(position).getFoodName());
+                dialogBuilder.setMessage("Enter values");
+
+                getFood(tmpFoodList.get(position).getID());
+
+                dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        //do something with edt.getText().toString();
+                    }
+                });
+                dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        //pass
+                    }
+                });
+                AlertDialog b = dialogBuilder.create();
+                b.show();
+
+            }
+        });
 
         userListAdapter = new UserListAdapter(getActivity(), tmpFoodList);
         userListAdapter.registerDataSetObserver(new DataSetObserver() {
@@ -325,6 +367,50 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
             Log.d("TAG_SHOW", "Can see");
 
         }
+    }
+
+
+    private void getFood(final long id) {
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... arg0) {
+                JSONObject foodGet = mFatSecretGet.getFood(id);
+                try {
+                    if (foodGet != null) {
+                        String food_name = foodGet.getString("food_name");
+                        JSONObject servings = foodGet.getJSONObject("servings");
+
+                        JSONObject serving = servings.getJSONObject("serving");
+                        String calories = serving.getString("calories");
+                        String carbohydrate = serving.getString("carbohydrate");
+                        String protein = serving.getString("protein");
+                        String fat = serving.getString("fat");
+                        String serving_description = serving.getString("serving_description");
+                        Long foodId= Long.parseLong(serving.getString("food_id"));
+                        Log.e("serving_description", serving_description);
+                        /**
+                         * Displays results in the LogCat
+                         */
+                        Log.e("food_name", food_name);
+                        Log.e("calories", calories);
+                        Log.e("carbohydrate", carbohydrate);
+                        Log.e("protein", protein);
+                        Log.e("fat", fat);
+                    }
+
+                } catch (JSONException exception) {
+                    return "Error";
+                }
+                return "";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                if (result.equals("Error"))
+                    Toast.makeText(getActivity().getBaseContext(),"No Items Containing Your Search", Toast.LENGTH_SHORT).show();
+            }
+        }.execute();
     }
 
 

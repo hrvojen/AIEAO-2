@@ -67,6 +67,7 @@ public class FoodActivity extends AppCompatActivity implements SearchFoodFragmen
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+        foodArrayList=new ArrayList<>();
 
 
     }
@@ -79,11 +80,7 @@ public class FoodActivity extends AppCompatActivity implements SearchFoodFragmen
         return true;
     }
 
-    @Override
-    public void addFoodToArrayList(Food food) {
-        foodArrayList.add(food);
-        mViewPager.getAdapter().notifyDataSetChanged();
-    }
+
 
     @Override
     public void onClick(View v) {
@@ -136,6 +133,12 @@ public class FoodActivity extends AppCompatActivity implements SearchFoodFragmen
 //            ft.add(fragment,"TAG");
 //            ft.commit();
 //        }
+    }
+
+    @Override
+    public void addFoodToArrayList(Food food) {
+        foodArrayList.add(food);
+        mViewPager.getAdapter().notifyDataSetChanged();
     }
 
     @Override

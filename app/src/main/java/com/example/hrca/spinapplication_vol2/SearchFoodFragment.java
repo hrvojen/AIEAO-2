@@ -278,6 +278,8 @@ public class SearchFoodFragment extends Fragment{
                                 String food_description = food_items.getString("food_description");
                                 String[] row = food_description.split("-");
                                 String id = food_items.getString("food_type");
+                                Long foodId= Long.parseLong(food_items.getString("food_id"));
+
                                 if (id.equals("Brand")) {
                                     brand = food_items.getString("brand_name");
                                 }
@@ -286,7 +288,8 @@ public class SearchFoodFragment extends Fragment{
                                 }
                                 String food_id = food_items.getString("food_id");
                                 foodList.add(new Food(food_name, row[1].substring(1),
-                                        "" + brand, food_id));
+                                        "" + brand, foodId));
+//                                foodList.add((new Food(food_name, foodId)));
                             }
                         }
                     }
@@ -340,6 +343,7 @@ public class SearchFoodFragment extends Fragment{
                         String protein = serving.getString("protein");
                         String fat = serving.getString("fat");
                         String serving_description = serving.getString("serving_description");
+                        Long foodId= Long.parseLong(serving.getString("food_id"));
                         Log.e("serving_description", serving_description);
                         /**
                          * Displays results in the LogCat

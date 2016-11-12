@@ -43,14 +43,13 @@ public class UserListAdapter extends ArrayAdapter<Food> {
 
 
         TextView mFoodName = (TextView) v.findViewById(R.id.user_food_name);
-        TextView mBrand = (TextView) v.findViewById(R.id.user_food_brand);
-        TextView mFoodDescription = (TextView) v.findViewById(R.id.user_food_description);
+//        TextView mBrand = (TextView) v.findViewById(R.id.user_food_brand);
+//        TextView mFoodDescription = (TextView) v.findViewById(R.id.user_food_description);
 
         mFoodName.setText(mItems.get(position).getFoodName());
-        mFoodDescription.setText(mItems.get(position).getDescription());
-        mBrand.setText(mItems.get(position).getBrand());
+//        mFoodDescription.setText(mItems.get(position).getDescription());
+//        mBrand.setText(mItems.get(position).getBrand());
         return v;
-
 
     }
 

@@ -33,7 +33,8 @@ public class FatSecretGet {
      */
     final static private String APP_METHOD = "GET";
     final static private String APP_KEY = "cf7facdf232e45638a5e2d1e1b27ed9c";
-    final static private String APP_SECRET = "67e1158b387e4220a9c624caf6b30c5d";
+
+    static private String APP_SECRET = "67e1158b387e4220a9c624caf6b30c5d";
     final static private String APP_URL = "http://platform.fatsecret.com/rest/server.api";
     private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 
@@ -76,7 +77,9 @@ public class FatSecretGet {
     private static String sign(String method, String uri, String[] params) {
         String[] p = {method, Uri.encode(uri), Uri.encode(paramify(params))};
         String s = join(p, "&");
+        APP_SECRET+="&";
         SecretKey sk = new SecretKeySpec(APP_SECRET.getBytes(), HMAC_SHA1_ALGORITHM);
+        APP_SECRET = APP_SECRET.substring(0, APP_SECRET.length()-1);
         try {
             Mac m = Mac.getInstance(HMAC_SHA1_ALGORITHM);
             m.init(sk);

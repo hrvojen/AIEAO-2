@@ -13,8 +13,7 @@ public class Food {
     private Double fat;
     private String brand;
     private String description;
-    private String ID;
-
+    private Long ID;
 
 
     public Food() {
@@ -25,7 +24,12 @@ public class Food {
         this.foodName = foodName;
     }
 
-    public Food(String foodName, String description, String brand, String ID) {
+    public Food(String foodName, Long ID) {
+        this.foodName = foodName;
+        this.ID = ID;
+    }
+
+    public Food(String foodName, String description, String brand, Long ID) {
         this.foodName = foodName;
         this.brand=brand;
         this.ID = ID;
@@ -40,11 +44,11 @@ public class Food {
         this.fat = fat;
     }
 
-    public String getID() {
+    public Long getID() {
         return ID;
     }
 
-    public void setID(String ID) {
+    public void setID(Long ID) {
         this.ID = ID;
     }
 
