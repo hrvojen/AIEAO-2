@@ -1,4 +1,4 @@
-package com.example.hrca.spinapplication_vol2.adapters;
+package com.example.hrca.spinapplication_vol2.interfaces;
 
 import com.example.hrca.spinapplication_vol2.model.Food;
 

@@ -36,12 +36,13 @@ public class Food {
         this.description = description;
     }
 
-    public Food(String foodName, Double calories, Double carbohydrate, Double protein, Double fat) {
+    public Food(String foodName, Double calories, Double carbohydrate, Double protein, Double fat, String servingDescription) {
         this.foodName = foodName;
         this.calories = calories;
         this.carbohydrate = carbohydrate;
         this.protein = protein;
         this.fat = fat;
+        this.description = servingDescription;
     }
 
     public Long getID() {
@@ -108,8 +109,4 @@ public class Food {
         this.description = description;
     }
 
-    @Override
-    public String toString() {
-        return getDescription().toString();
-    }
 }

@@ -7,14 +7,10 @@ import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseBooleanArray;
@@ -32,17 +28,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.hrca.spinapplication_vol2.adapters.DataTransferInterface;
-import com.example.hrca.spinapplication_vol2.adapters.SearchAdapter;
-import com.example.hrca.spinapplication_vol2.adapters.Updateable;
+import com.example.hrca.spinapplication_vol2.adapters.SpinnerAdapter;
+import com.example.hrca.spinapplication_vol2.interfaces.DataTransferInterface;
 import com.example.hrca.spinapplication_vol2.adapters.UserListAdapter;
 import com.example.hrca.spinapplication_vol2.fatsecretimplementation.FatSecretGet;
 import com.example.hrca.spinapplication_vol2.model.Food;
-import com.github.brnunes.swipeablerecyclerview.SwipeableRecyclerViewTouchListener;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +62,7 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
     private UserListAdapter userListAdapter;
     public ListView mListView;
     private ArrayList<Food> foodList=new ArrayList<>();
+    private List<Food> foodListBasedOnServings=new ArrayList<>();
     private static final String FOOD_KEY = "food_key";
     private ArrayList<Food> tempArrayList;
     private TextView dummyTextView;
@@ -76,8 +71,8 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
     RecyclerView recyclerView;
     private EditText editTextNumberOfUnits;
     private FatSecretGet mFatSecretGet;
-
-
+    private SpinnerAdapter spinnerAdapter;
+    private Spinner spinnerUnits;
     @Override
     public void setValues(ArrayList<Food> arrayList) {
         foodList.addAll(arrayList);
@@ -166,7 +161,6 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
 
         mListView=(ListView)view.findViewById(R.id.userFoodListView);
 
-
         return view;
     }
 
@@ -252,17 +246,21 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+             getFood(tmpFoodList.get(position).getID());
+
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
                 LayoutInflater inflater = getActivity().getLayoutInflater();
                 final View dialogView = inflater.inflate(R.layout.dialog_user_list_item, null);
                 dialogBuilder.setView(dialogView);
 
-                Spinner spinnerUnits=(Spinner)getActivity().findViewById(R.id.spinnerOfUnits);
-
                 dialogBuilder.setTitle(tmpFoodList.get(position).getFoodName());
                 dialogBuilder.setMessage("Enter values");
 
-                getFood(tmpFoodList.get(position).getID());
+
+                spinnerUnits=(Spinner)dialogView.findViewById(R.id.spinnerOfUnits);
+
+
+
 
                 dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
@@ -275,8 +273,12 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
                     }
                 });
                 AlertDialog b = dialogBuilder.create();
-                b.show();
 
+//                spinnerAdapter=new SpinnerAdapter(getActivity(), R.layout.spinner_item, foodListBasedOnServings);
+//
+//                spinnerUnits.setAdapter(spinnerAdapter);
+
+                b.show();
             }
         });
 
@@ -371,7 +373,16 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
 
 
     private void getFood(final long id) {
+
+        foodListBasedOnServings.clear();
+
         new AsyncTask<String, String, String>() {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
             @Override
             protected String doInBackground(String... arg0) {
                 JSONObject foodGet = mFatSecretGet.getFood(id);
@@ -380,25 +391,43 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
                         String food_name = foodGet.getString("food_name");
                         JSONObject servings = foodGet.getJSONObject("servings");
 
-                        JSONObject serving = servings.getJSONObject("serving");
-                        String calories = serving.getString("calories");
-                        String carbohydrate = serving.getString("carbohydrate");
-                        String protein = serving.getString("protein");
-                        String fat = serving.getString("fat");
-                        String serving_description = serving.getString("serving_description");
-                        Long foodId= Long.parseLong(serving.getString("food_id"));
-                        Log.e("serving_description", serving_description);
-                        /**
-                         * Displays results in the LogCat
-                         */
-                        Log.e("food_name", food_name);
-                        Log.e("calories", calories);
-                        Log.e("carbohydrate", carbohydrate);
-                        Log.e("protein", protein);
-                        Log.e("fat", fat);
+                        JSONArray serving = servings.getJSONArray("serving");
+
+                        for (int i=0;i<serving.length();i++){
+                            JSONObject servingObject=serving.getJSONObject(i);
+
+                            String calo=servingObject.getString("calories");
+                            Double calories = Double.parseDouble(servingObject.getString("calories"));
+                            Double carbohydrate = Double.parseDouble(servingObject.getString("carbohydrate"));
+                            Double protein = Double.parseDouble(servingObject.getString("protein"));
+                            Double fat = Double.parseDouble(servingObject.getString("fat"));
+                            String serving_description = servingObject.getString("serving_description");
+//                            Long foodId= Long.parseLong(servingObject.getString("food_id"));
+//                            Double calories = Double.parseDouble(serving.getString("calories"));
+//                            Double carbohydrate = Double.parseDouble(serving.getString("carbohydrate"));
+//                            Double protein = Double.parseDouble(serving.getString("protein"));
+//                            Double fat = Double.parseDouble(serving.getString("fat"));
+//                            String serving_description = serving.getString("serving_description");
+//                            Long foodId= Long.parseLong(serving.getString("food_id"));
+
+                            Food foodBasedOnServing = new Food(food_name,calories,carbohydrate,protein,fat,serving_description);
+
+                            foodListBasedOnServings.add(foodBasedOnServing);
+                        }
+
+
+//                        Log.e("serving_description", serving_description);
+//
+//                        Log.e("food_name", food_name);
+//                        Log.e("calories", calories.toString());
+//                        Log.e("carbohydrate", carbohydrate.toString());
+//                        Log.e("protein", protein.toString());
+//                        Log.e("fat", fat.toString());
                     }
 
                 } catch (JSONException exception) {
+                    String s = exception.getMessage();
+                    exception.getMessage();
                     return "Error";
                 }
                 return "";
@@ -406,6 +435,9 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
 
             @Override
             protected void onPostExecute(String result) {
+                spinnerAdapter=new SpinnerAdapter(getActivity(), R.layout.spinner_item, foodListBasedOnServings);
+
+                spinnerUnits.setAdapter(spinnerAdapter);
                 super.onPostExecute(result);
                 if (result.equals("Error"))
                     Toast.makeText(getActivity().getBaseContext(),"No Items Containing Your Search", Toast.LENGTH_SHORT).show();
