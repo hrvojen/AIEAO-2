@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.example.hrca.spinapplication_vol2.R;
 import com.example.hrca.spinapplication_vol2.model.Food;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 /**
@@ -21,8 +23,10 @@ public class UserListAdapter extends ArrayAdapter<Food> {
 
     private final Context mContext;
     private ArrayList<Food> userFoodList = new ArrayList<>();
+    private Food userFood;
     private ArrayList<Food> mItems=new ArrayList<>();
     private SparseBooleanArray mSelectedItemsIds;
+
 
     public UserListAdapter(Context mContext, ArrayList<Food> userFoodList) {
         super(mContext, R.layout.user_list_row, userFoodList);
@@ -46,6 +50,7 @@ public class UserListAdapter extends ArrayAdapter<Food> {
 //        TextView mBrand = (TextView) v.findViewById(R.id.user_food_brand);
 //        TextView mFoodDescription = (TextView) v.findViewById(R.id.user_food_description);
 
+//        TextView editTextOfUnits=(TextView) v.findViewById(R.id.description_of_user_food)
         mFoodName.setText(mItems.get(position).getFoodName());
 //        mFoodDescription.setText(mItems.get(position).getDescription());
 //        mBrand.setText(mItems.get(position).getBrand());

@@ -37,6 +37,7 @@ import com.example.hrca.spinapplication_vol2.model.Food;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +74,9 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
     private FatSecretGet mFatSecretGet;
     private SpinnerAdapter spinnerAdapter;
     private Spinner spinnerUnits;
+    private EditText editTextOfUnits;
+    private TextView dummyCarbs;
+
     @Override
     public void setValues(ArrayList<Food> arrayList) {
         foodList.addAll(arrayList);
@@ -248,6 +252,8 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
 
              getFood(tmpFoodList.get(position).getID());
 
+
+
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
                 LayoutInflater inflater = getActivity().getLayoutInflater();
                 final View dialogView = inflater.inflate(R.layout.dialog_user_list_item, null);
@@ -258,13 +264,23 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
 
 
                 spinnerUnits=(Spinner)dialogView.findViewById(R.id.spinnerOfUnits);
-
+                editTextOfUnits=(EditText)dialogView.findViewById(R.id.editTextOfUnits);
 
 
 
                 dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         //do something with edt.getText().toString();
+                        String foodDescription=foodListBasedOnServings.get(spinnerUnits.getSelectedItemPosition()).getDescription();
+                        String numberOfUnits=editTextOfUnits.getText().toString();
+                        Log.d("TAG_LOGA", " "+numberOfUnits);
+                        TextView textViewNumberOfUnits=(TextView)getActivity().findViewById(R.id.text_view_number_of_units);
+                        TextView textViewDescription= (TextView) getActivity().findViewById(R.id.description_of_user_food);
+                        textViewDescription.setText(foodDescription);
+                        textViewNumberOfUnits.setText(numberOfUnits);
+
+                        userListAdapter = new UserListAdapter(getActivity(), tmpFoodList);
+                        mListView.setAdapter(userListAdapter);
                     }
                 });
                 dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -281,6 +297,8 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
                 b.show();
             }
         });
+
+
 
         userListAdapter = new UserListAdapter(getActivity(), tmpFoodList);
         userListAdapter.registerDataSetObserver(new DataSetObserver() {
