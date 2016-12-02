@@ -15,6 +15,16 @@ public class Food {
     private String description;
     private Long ID;
 
+    public String getNumberOfUnits() {
+        return numberOfUnits;
+    }
+
+    public void setNumberOfUnits(String numberOfUnits) {
+        this.numberOfUnits = numberOfUnits;
+    }
+
+    private String numberOfUnits;
+
 
     public Food() {
 
@@ -36,13 +46,14 @@ public class Food {
         this.description = description;
     }
 
-    public Food(String foodName, Double calories, Double carbohydrate, Double protein, Double fat, String servingDescription) {
+    public Food(String foodName, Double calories, Double carbohydrate, Double protein, Double fat, String servingDescription, String numberOfUnits) {
         this.foodName = foodName;
         this.calories = calories;
         this.carbohydrate = carbohydrate;
         this.protein = protein;
         this.fat = fat;
         this.description = servingDescription;
+        this.numberOfUnits=numberOfUnits;
     }
 
     public Long getID() {

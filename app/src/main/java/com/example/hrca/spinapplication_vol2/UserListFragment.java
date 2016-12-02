@@ -75,7 +75,6 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
     private SpinnerAdapter spinnerAdapter;
     private Spinner spinnerUnits;
     private EditText editTextOfUnits;
-    private TextView dummyCarbs;
 
     @Override
     public void setValues(ArrayList<Food> arrayList) {
@@ -248,7 +247,7 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, final int position, final long id) {
 
              getFood(tmpFoodList.get(position).getID());
 
@@ -274,13 +273,34 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
                         String foodDescription=foodListBasedOnServings.get(spinnerUnits.getSelectedItemPosition()).getDescription();
                         String numberOfUnits=editTextOfUnits.getText().toString();
                         Log.d("TAG_LOGA", " "+numberOfUnits);
-                        TextView textViewNumberOfUnits=(TextView)getActivity().findViewById(R.id.text_view_number_of_units);
-                        TextView textViewDescription= (TextView) getActivity().findViewById(R.id.description_of_user_food);
-                        textViewDescription.setText(foodDescription);
-                        textViewNumberOfUnits.setText(numberOfUnits);
+
+                        Food selectedFoodByUser=null;
+
+                        for (Food selectedFood : foodListBasedOnServings) {
+                            if (selectedFood.getDescription() == foodDescription){
+                                selectedFoodByUser=selectedFood;
+                                selectedFoodByUser.setNumberOfUnits(numberOfUnits);
+                                selectedFoodByUser.setID(tmpFoodList.get(position).getID());
+
+                                Double doubleValueOfNumberOfUnits=Double.parseDouble(numberOfUnits);
+
+                                selectedFoodByUser.setCalories(selectedFoodByUser.getCalories()*doubleValueOfNumberOfUnits);
+
+                                selectedFoodByUser.setFat(selectedFoodByUser.getFat()*doubleValueOfNumberOfUnits);
+
+                                selectedFoodByUser.setCarbohydrate(selectedFoodByUser.getCarbohydrate()*doubleValueOfNumberOfUnits);
+
+                                selectedFoodByUser.setProtein(selectedFoodByUser.getProtein()*doubleValueOfNumberOfUnits);
+
+
+                            }
+                        }
+                        tmpFoodList.set(position, selectedFoodByUser);
 
                         userListAdapter = new UserListAdapter(getActivity(), tmpFoodList);
+
                         mListView.setAdapter(userListAdapter);
+                        userListAdapter.notifyDataSetChanged();
                     }
                 });
                 dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -414,33 +434,17 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
                         for (int i=0;i<serving.length();i++){
                             JSONObject servingObject=serving.getJSONObject(i);
 
-                            String calo=servingObject.getString("calories");
                             Double calories = Double.parseDouble(servingObject.getString("calories"));
                             Double carbohydrate = Double.parseDouble(servingObject.getString("carbohydrate"));
                             Double protein = Double.parseDouble(servingObject.getString("protein"));
                             Double fat = Double.parseDouble(servingObject.getString("fat"));
-                            String serving_description = servingObject.getString("serving_description");
-//                            Long foodId= Long.parseLong(servingObject.getString("food_id"));
-//                            Double calories = Double.parseDouble(serving.getString("calories"));
-//                            Double carbohydrate = Double.parseDouble(serving.getString("carbohydrate"));
-//                            Double protein = Double.parseDouble(serving.getString("protein"));
-//                            Double fat = Double.parseDouble(serving.getString("fat"));
-//                            String serving_description = serving.getString("serving_description");
-//                            Long foodId= Long.parseLong(serving.getString("food_id"));
+                            String mesaurment_description = servingObject.getString("measurement_description");
 
-                            Food foodBasedOnServing = new Food(food_name,calories,carbohydrate,protein,fat,serving_description);
+                            Food foodBasedOnServing = new Food(food_name,calories,carbohydrate,protein,fat,mesaurment_description, null);
 
                             foodListBasedOnServings.add(foodBasedOnServing);
                         }
 
-
-//                        Log.e("serving_description", serving_description);
-//
-//                        Log.e("food_name", food_name);
-//                        Log.e("calories", calories.toString());
-//                        Log.e("carbohydrate", carbohydrate.toString());
-//                        Log.e("protein", protein.toString());
-//                        Log.e("fat", fat.toString());
                     }
 
                 } catch (JSONException exception) {

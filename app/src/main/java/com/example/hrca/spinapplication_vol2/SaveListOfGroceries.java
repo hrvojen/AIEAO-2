@@ -14,11 +14,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
+
+import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -35,6 +39,9 @@ public class SaveListOfGroceries extends AppCompatActivity  {
 
     private boolean isExpanded = false;
 
+    private Spinner spinnerTypeOfMeal;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +49,7 @@ public class SaveListOfGroceries extends AppCompatActivity  {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_save_list);
         setSupportActionBar(toolbar);
 
-        setTitle("Section 1");
+        setTitle("Select a date: ");
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -51,6 +58,16 @@ public class SaveListOfGroceries extends AppCompatActivity  {
 
         mAppBarLayout = (AppBarLayout) findViewById(R.id.app_bar_save_list);
 
+        spinnerTypeOfMeal=(Spinner)findViewById(R.id.spinnerTypeOfMeal);
+
+
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.type_of_meal_array, android.R.layout.simple_spinner_item);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+// Apply the adapter to the spinner
+        spinnerTypeOfMeal.setAdapter(adapter);
         // Set up the CompactCalendarView
         mCompactCalendarView = (CompactCalendarView) findViewById(R.id.compactcalendar_view);
 
@@ -108,14 +125,16 @@ public class SaveListOfGroceries extends AppCompatActivity  {
 
         if (tvTitle != null) {
             tvTitle.setText(title);
+
         }
     }
 
     public void setSubtitle(String subtitle) {
         TextView datePickerTextView = (TextView) findViewById(R.id.date_picker_text_view);
-
+        TextView textViewOfSelectedDate=(TextView)findViewById(R.id.textViewOfDateSelected);
         if (datePickerTextView != null) {
             datePickerTextView.setText(subtitle);
+            textViewOfSelectedDate.setText(subtitle);
         }
     }
 

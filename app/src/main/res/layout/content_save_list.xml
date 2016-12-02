@@ -13,8 +13,69 @@
     tools:context=".SaveListOfGroceries"
     tools:showIn="@layout/app_bar_save_list">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="Name your meal:"
+                android:layout_width="151dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView2" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/editText2"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="1dp"
+            android:layout_weight="0.06">
+
+            <TextView
+                android:text="Date:"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView3"
+                android:layout_weight="0.5" />
+
+            <TextView
+                android:text="Pick date from above toolbar"
+                android:layout_width="202dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/textViewOfDateSelected" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="151dp"
+                android:layout_height="wrap_content"
+                android:text="Pick a type of meal: " />
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinnerTypeOfMeal" />
+        </LinearLayout>
+
+    </LinearLayout>
+
 </RelativeLayout>

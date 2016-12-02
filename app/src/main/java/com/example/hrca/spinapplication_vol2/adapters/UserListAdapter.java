@@ -26,6 +26,17 @@ public class UserListAdapter extends ArrayAdapter<Food> {
     private Food userFood;
     private ArrayList<Food> mItems=new ArrayList<>();
     private SparseBooleanArray mSelectedItemsIds;
+    String numberOfUnits;
+    String foodDescription;
+
+    public UserListAdapter(Context mContext, ArrayList<Food> userFoodList, String numberOfUnits, String foodDescription) {
+        super(mContext, R.layout.user_list_row, userFoodList);
+        mSelectedItemsIds = new SparseBooleanArray();
+        this.mContext = mContext;
+        this.mItems.addAll(userFoodList);
+        this.numberOfUnits=numberOfUnits;
+        this.foodDescription=foodDescription;
+    }
 
 
     public UserListAdapter(Context mContext, ArrayList<Food> userFoodList) {
@@ -46,12 +57,31 @@ public class UserListAdapter extends ArrayAdapter<Food> {
         View v = inflater.inflate(R.layout.user_list_row, parent, false);
 
 
+        TextView textViewNumberOfUnits=(TextView)v.findViewById(R.id.text_view_number_of_units);
+        TextView textViewDescription= (TextView) v.findViewById(R.id.description_of_user_food);
+        TextView textViewDummyCarbs= (TextView) v.findViewById(R.id.textViewDummyCarbs);
+
+
         TextView mFoodName = (TextView) v.findViewById(R.id.user_food_name);
 //        TextView mBrand = (TextView) v.findViewById(R.id.user_food_brand);
 //        TextView mFoodDescription = (TextView) v.findViewById(R.id.user_food_description);
 
+        textViewNumberOfUnits.setVisibility(View.INVISIBLE);
+        textViewDescription.setVisibility(View.INVISIBLE);
+        textViewDummyCarbs.setVisibility(View.INVISIBLE);
+
 //        TextView editTextOfUnits=(TextView) v.findViewById(R.id.description_of_user_food)
         mFoodName.setText(mItems.get(position).getFoodName());
+        if((mItems.get(position).getNumberOfUnits() !=null && mItems.get(position).getDescription() != null)){
+            textViewDescription.setText(mItems.get(position).getDescription());
+            textViewNumberOfUnits.setText(mItems.get(position).getNumberOfUnits());
+
+            textViewNumberOfUnits.setVisibility(View.VISIBLE);
+            textViewDescription.setVisibility(View.VISIBLE);
+            textViewDummyCarbs.setVisibility(View.VISIBLE);
+
+        }
+
 //        mFoodDescription.setText(mItems.get(position).getDescription());
 //        mBrand.setText(mItems.get(position).getBrand());
         return v;
@@ -102,6 +132,10 @@ public class UserListAdapter extends ArrayAdapter<Food> {
 
     public SparseBooleanArray getSelectedIds() {
         return mSelectedItemsIds;
+    }
+
+    public void changeItem(int position, Food foodToChange){
+        mItems.set(position, foodToChange);
     }
 
 }

@@ -12,16 +12,27 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="delete">Delete</string>
 
-    <string-array name="unitss_array">
-        <item>Mercury</item>
-        <item>Venus</item>
-        <item>Earth</item>
-        <item>Mars</item>
-        <item>Jupiter</item>
-        <item>Saturn</item>
-        <item>Uranus</item>
-        <item>Neptune</item>
+    <string-array name="type_of_meal_array">
+        <item>Breakfast</item>
+        <item>Lunch</item>
+        <item>Dinner</item>
+        <item>Snack</item>
     </string-array>
+    <string name="title_activity_login_or_register">Login / Register</string>
 
+    <string name="weigth">Weight</string>
+    <string name="height">Height</string>
+    <string name="gender">Gender</string>
+    <string name="activityType">Activity Type</string>
+    <string name="years">How old are you</string>
+
+
+    <string-array name="activityType">
+        <item>Sitting most of the time</item>
+        <item>Low intensity activity (1-3 activities per week)</item>
+        <item>Medium intensity activity (3-5 activities per week)</item>
+        <item>High intensity activity (6-7 activities per week)</item>
+        <item>Active athlete</item>
+    </string-array>
 
 </resources>
