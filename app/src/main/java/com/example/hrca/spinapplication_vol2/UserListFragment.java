@@ -7,6 +7,7 @@ import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -65,7 +66,7 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
     private ArrayList<Food> foodList=new ArrayList<>();
     private List<Food> foodListBasedOnServings=new ArrayList<>();
     private static final String FOOD_KEY = "food_key";
-    private ArrayList<Food> tempArrayList;
+    private ArrayList<Food> finalFoodList;
     private TextView dummyTextView;
     private OnFragmentInteractionListener mListener;
     OnHeadlineSelectedListener mCallback;
@@ -191,6 +192,9 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
             @Override
             public void onClick(View v) {
                 Intent saveListActivity=new Intent(getActivity(), SaveListOfGroceries.class);
+                //saveListActivity.putExtra("grocery-food", finalFoodList);
+
+                saveListActivity.putExtra("GroceryFood",finalFoodList);
                 startActivity(saveListActivity);
             }
         });
@@ -249,6 +253,10 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, final long id) {
 
+//                if (tmpFoodList.get(position).getBrand().contains("Generic")){
+
+
+
              getFood(tmpFoodList.get(position).getID());
 
 
@@ -299,6 +307,9 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
 
                         userListAdapter = new UserListAdapter(getActivity(), tmpFoodList);
 
+                        finalFoodList=new ArrayList<Food>();
+                        finalFoodList=tmpFoodList;
+
                         mListView.setAdapter(userListAdapter);
                         userListAdapter.notifyDataSetChanged();
                     }
@@ -315,7 +326,14 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
 //                spinnerUnits.setAdapter(spinnerAdapter);
 
                 b.show();
+//            }
+
+//                else {
+//                    getFood(tmpFoodList.get(position).getID());
+//                }
             }
+
+
         });
 
 
@@ -427,9 +445,37 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
                 try {
                     if (foodGet != null) {
                         String food_name = foodGet.getString("food_name");
+
+                        String food_brand=foodGet.getString("food_type");
+
+                        if (food_brand.contains("Brand")){
+                            System.out.print(food_brand);
+
+                            JSONObject servings = foodGet.getJSONObject("servings");
+
+                            JSONObject serving = servings.getJSONObject("serving");
+
+                            Double calories = Double.parseDouble(serving.getString("calories"));
+                            Double carbohydrate = Double.parseDouble(serving.getString("carbohydrate"));
+                            Double protein = Double.parseDouble(serving.getString("protein"));
+                            Double fat = Double.parseDouble(serving.getString("fat"));
+                            String mesaurment_description = serving.getString("measurement_description");
+
+                            Food foodBasedOnServing = new Food(food_name,calories,carbohydrate,protein,fat,mesaurment_description, null);
+
+                            foodListBasedOnServings.add(foodBasedOnServing);
+
+                        }
+                        else {
+
+
+
                         JSONObject servings = foodGet.getJSONObject("servings");
 
                         JSONArray serving = servings.getJSONArray("serving");
+
+                        System.out.print(servings.length());
+
 
                         for (int i=0;i<serving.length();i++){
                             JSONObject servingObject=serving.getJSONObject(i);
@@ -443,6 +489,8 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
                             Food foodBasedOnServing = new Food(food_name,calories,carbohydrate,protein,fat,mesaurment_description, null);
 
                             foodListBasedOnServings.add(foodBasedOnServing);
+                        }
+
                         }
 
                     }

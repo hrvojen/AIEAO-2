@@ -58,6 +58,13 @@ public class SearchAdapter extends ArrayAdapter<Food> {
 //                Food food=new Food(mItem.get(position2).getFoodName(),mItem.get(position2).getDescription(),mItem.get(position2).getBrand()," ");
                 Food food=new Food(mItem.get(position2).getFoodName(),mItem.get(position2).getDescription(),mItem.get(position2).getBrand(),mItem.get(position).getID());
 
+                food.setBrand(mItem.get(position2).getBrand());
+                food.setCalories(mItem.get(position2).getCalories());
+                food.setProtein(mItem.get(position2).getProtein());
+                food.setFat(mItem.get(position2).getFat());
+                food.setCarbohydrate(mItem.get(position2).getCarbohydrate());
+
+
                 myFoodList.add(food);
                 Log.d("String_tag", food.toString());
                 if (mContext instanceof FoodActivity){

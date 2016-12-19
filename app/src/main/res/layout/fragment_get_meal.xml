@@ -1,0 +1,28 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:card="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.hrca.spinapplication_vol2.fragments.GetMealFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/tekstViewDummyGetMeal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hello_blank_fragment" />
+
+    <TextView
+        android:id="@+id/tekstViewDummyGetMealDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hello_blank_fragment"
+        android:layout_marginTop="15dp" />
+
+    <it.gmariotti.cardslib.library.recyclerview.view.CardRecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         card:list_card_layout_resourceID="@layout/native_recyclerview_material_card_layout"
+        android:id="@+id/carddemo_recyclerview"/>
+    <!--card:list_card_layout_resourceID="@layout/native_recyclerview_card_layout"-->
+</FrameLayout>

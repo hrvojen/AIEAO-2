@@ -97,6 +97,8 @@ public class MainActivity extends AppCompatActivity
             Intent loginIntent=new Intent(this, LoginOrRegisterActivity.class);
             startActivity(loginIntent);
         } else if (id == R.id.nav_meal_history) {
+            Intent loginIntent=new Intent(this, DietCalendarActivity.class);
+            startActivity(loginIntent);
 
         } else if (id == R.id.nav_nutritions) {
 

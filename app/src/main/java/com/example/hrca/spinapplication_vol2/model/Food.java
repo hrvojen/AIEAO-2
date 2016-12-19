@@ -1,10 +1,15 @@
 package com.example.hrca.spinapplication_vol2.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
 /**
  * Created by hrca on 18.10.2016..
  */
 
-public class Food {
+public class Food implements Serializable {
 
     private String foodName;
     private Double calories;
@@ -119,5 +124,6 @@ public class Food {
     public void setDescription(String description) {
         this.description = description;
     }
+
 
 }

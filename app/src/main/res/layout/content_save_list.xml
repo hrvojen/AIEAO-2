@@ -15,7 +15,7 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent">
 
         <LinearLayout
@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
                 android:ems="10"
-                android:id="@+id/editText2"
+                android:id="@+id/mealName"
                 android:layout_weight="1" />
         </LinearLayout>
 
@@ -42,8 +42,7 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:elevation="1dp"
-            android:layout_weight="0.06">
+            android:elevation="1dp">
 
             <TextView
                 android:text="Date:"
@@ -57,6 +56,7 @@
                 android:layout_width="202dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/textViewOfDateSelected" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -74,6 +74,49 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/spinnerTypeOfMeal" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:text="Browse For Image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/buttonBrowseForImage"
+                android:layout_weight="1" />
+
+            <Button
+                android:text="Take a picture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/buttonTakePicture"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_menu_gallery"
+            android:id="@+id/imageViewMeal" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.design.widget.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                app:fabSize="mini"
+                app:srcCompat="@drawable/ic_menu_send"
+                android:id="@+id/floatingActionButtonSaveMeal"
+                android:layout_weight="0.8"
+                android:layout_gravity="bottom|end" />
         </LinearLayout>
 
     </LinearLayout>
