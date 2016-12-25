@@ -111,19 +111,6 @@ public class FoodActivity extends AppCompatActivity implements SearchFoodFragmen
     @Override
     public void onFragmentInteraction(Uri uri) {
 
-//        UserListFragment userListFragment=(UserListFragment)getSupportFragmentManager().findFragmentById()
-
-//        Log.d("Number of items: ", " "+foodArrayList.size());
-//
-//
-//        if(foodArrayList != null) {
-//
-//            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//            Fragment fragment = UserListFragment.newInstance(foodArrayList);
-//            Log.d("Number of items: ", " "+foodArrayList.size());
-//            ft.add(fragment,"TAG");
-//            ft.commit();
-//        }
     }
 
     @Override
@@ -150,15 +137,6 @@ public class FoodActivity extends AppCompatActivity implements SearchFoodFragmen
 
     @Override
     public void onArticleSelected(int position) {
-
-//        if(foodArrayList != null) {
-//
-//            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//            Fragment fragment = UserListFragment.newInstance(foodArrayList);
-//            Log.d("Number of items: ", " "+foodArrayList.size());
-//            ft.add(fragment,"TAG");
-//            ft.commit();
-//        }
 
     }
 

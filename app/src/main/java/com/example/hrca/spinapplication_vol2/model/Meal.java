@@ -4,13 +4,14 @@ import android.graphics.Bitmap;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by hrca on 02.12.2016..
  */
 
-public class Meal {
+public class Meal implements Serializable{
 
     @SerializedName("mealName")
     String name;

@@ -30,7 +30,11 @@
             android:name=".LoginOrRegisterActivity"
             android:label="@string/title_activity_login_or_register"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".DietCalendarActivity"></activity>
+        <activity android:name=".DietCalendarActivity" />
+        <activity
+            android:name=".NutritionDataActivity"
+            android:label="@string/title_activity_nutrition_data"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

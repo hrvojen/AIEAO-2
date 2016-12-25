@@ -89,18 +89,7 @@ public class SearchAdapter extends ArrayAdapter<Food> {
         return v;
     }
 
-//    private View.OnClickListener myButtonClickListener = new View.OnClickListener() {
-//        @Override
-//        public void onClick(View v) {
-//            View parentRow = (View) v.getParent();
-//            ListView listView = (ListView) parentRow.getParent();
-//            final int position = listView.getPositionForView(parentRow);
-//            Object o=listView.getItemAtPosition(position);
-//            String s=(String)o;
-//
-//            Toast toast=Toast.makeText(getContext(), s, Toast.LENGTH_SHORT);
-//        }
-//    };
+
 
 
 }

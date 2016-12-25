@@ -102,6 +102,9 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_nutritions) {
 
+            Intent loginIntent=new Intent(this, NutritionDataActivity.class);
+            startActivity(loginIntent);
+
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
