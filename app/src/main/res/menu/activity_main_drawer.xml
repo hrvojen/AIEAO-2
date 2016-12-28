@@ -20,10 +20,11 @@
             android:id="@+id/nav_nutritions"
             android:icon="@drawable/ic_insert_chart_black_24dp"
             android:title="See nutritions" />
-        <item
+   <!--      <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
             android:title="dummy" />
+            -->
     </group>
 
     <item android:title="Communicate">

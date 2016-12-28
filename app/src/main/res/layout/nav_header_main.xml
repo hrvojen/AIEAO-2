@@ -23,8 +23,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="Guest User"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:text="SPIN Application"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:id="@+id/textView6" />
 
     <TextView
         android:id="@+id/textView"

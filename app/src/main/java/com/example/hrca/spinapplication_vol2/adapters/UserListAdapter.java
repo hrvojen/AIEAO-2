@@ -28,6 +28,8 @@ public class UserListAdapter extends ArrayAdapter<Food> {
     private SparseBooleanArray mSelectedItemsIds;
     String numberOfUnits;
     String foodDescription;
+    private TextView clickToAddServings;
+
 
     public UserListAdapter(Context mContext, ArrayList<Food> userFoodList, String numberOfUnits, String foodDescription) {
         super(mContext, R.layout.user_list_row, userFoodList);
@@ -60,6 +62,7 @@ public class UserListAdapter extends ArrayAdapter<Food> {
         TextView textViewNumberOfUnits=(TextView)v.findViewById(R.id.text_view_number_of_units);
         TextView textViewDescription= (TextView) v.findViewById(R.id.description_of_user_food);
         TextView textViewDummyCarbs= (TextView) v.findViewById(R.id.textViewDummyCarbs);
+        clickToAddServings=(TextView)v.findViewById(R.id.textViewClickToAddServings);
 
 
         TextView mFoodName = (TextView) v.findViewById(R.id.user_food_name);
@@ -79,6 +82,7 @@ public class UserListAdapter extends ArrayAdapter<Food> {
             textViewNumberOfUnits.setVisibility(View.VISIBLE);
             textViewDescription.setVisibility(View.VISIBLE);
             textViewDummyCarbs.setVisibility(View.VISIBLE);
+            clickToAddServings.setVisibility(View.GONE);
 
         }
 

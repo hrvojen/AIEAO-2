@@ -1,6 +1,7 @@
 package com.example.hrca.spinapplication_vol2.adapters;
 
 import android.content.Context;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,7 +47,7 @@ public class SearchAdapter extends ArrayAdapter<Food> {
         TextView mFoodName = (TextView) v.findViewById(R.id.food_name);
         TextView mBrand = (TextView) v.findViewById(R.id.food_brand);
         TextView mFoodDescription = (TextView) v.findViewById(R.id.food_description);
-        ImageButton addToMyListButton=(ImageButton)v.findViewById(R.id.buttonAddToList);
+        final ImageButton addToMyListButton=(ImageButton)v.findViewById(R.id.buttonAddToList);
 //        addToMyListButton.setTag(position);
         final int position2=position;
 
@@ -76,7 +77,10 @@ public class SearchAdapter extends ArrayAdapter<Food> {
                    ((FoodActivity) mContext).addFoodToArrayList(food);
                   //((FoodActivity) mContext).onFragmentInteraction(UserListFragment.class);
                     ((FoodActivity) mContext).onArticleSelected(position);
+                    Snackbar snackbar = Snackbar
+                            .make(v, "Item added to list in second tab", Snackbar.LENGTH_LONG);
 
+                    snackbar.show();
 
 
                 }

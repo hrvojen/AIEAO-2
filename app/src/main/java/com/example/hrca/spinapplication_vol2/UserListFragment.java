@@ -165,6 +165,7 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
 
         mListView=(ListView)view.findViewById(R.id.userFoodListView);
 
+
         return view;
     }
 
@@ -290,15 +291,45 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
                                 selectedFoodByUser.setNumberOfUnits(numberOfUnits);
                                 selectedFoodByUser.setID(tmpFoodList.get(position).getID());
 
-                                Double doubleValueOfNumberOfUnits=Double.parseDouble(numberOfUnits);
 
-                                selectedFoodByUser.setCalories(selectedFoodByUser.getCalories()*doubleValueOfNumberOfUnits);
+                                Boolean wantToCloseDialog = (editTextOfUnits.getText().toString().trim().isEmpty());
+                                if (wantToCloseDialog){
+                                    editTextOfUnits.requestFocus();
+                                    break;
+                                }
+                                else {
 
-                                selectedFoodByUser.setFat(selectedFoodByUser.getFat()*doubleValueOfNumberOfUnits);
 
-                                selectedFoodByUser.setCarbohydrate(selectedFoodByUser.getCarbohydrate()*doubleValueOfNumberOfUnits);
+                                    Double doubleValueOfNumberOfUnits=Double.parseDouble(numberOfUnits);
 
-                                selectedFoodByUser.setProtein(selectedFoodByUser.getProtein()*doubleValueOfNumberOfUnits);
+                                    selectedFoodByUser.setCalories(selectedFoodByUser.getCalories()*doubleValueOfNumberOfUnits);
+
+                                    selectedFoodByUser.setFat(selectedFoodByUser.getFat()*doubleValueOfNumberOfUnits);
+
+                                    selectedFoodByUser.setCarbohydrate(selectedFoodByUser.getCarbohydrate()*doubleValueOfNumberOfUnits);
+
+                                    selectedFoodByUser.setProtein(selectedFoodByUser.getProtein()*doubleValueOfNumberOfUnits);
+
+
+
+
+                                    // dialog.dismiss();
+
+                                }
+
+
+
+
+
+         //                       Double doubleValueOfNumberOfUnits=Double.parseDouble(numberOfUnits);
+
+         //                       selectedFoodByUser.setCalories(selectedFoodByUser.getCalories()*doubleValueOfNumberOfUnits);
+
+        //                        selectedFoodByUser.setFat(selectedFoodByUser.getFat()*doubleValueOfNumberOfUnits);
+
+         //                       selectedFoodByUser.setCarbohydrate(selectedFoodByUser.getCarbohydrate()*doubleValueOfNumberOfUnits);
+
+         //                       selectedFoodByUser.setProtein(selectedFoodByUser.getProtein()*doubleValueOfNumberOfUnits);
 
 
                             }
@@ -312,6 +343,10 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
 
                         mListView.setAdapter(userListAdapter);
                         userListAdapter.notifyDataSetChanged();
+
+
+
+
                     }
                 });
                 dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -320,6 +355,9 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
                     }
                 });
                 AlertDialog b = dialogBuilder.create();
+
+
+
 
 //                spinnerAdapter=new SpinnerAdapter(getActivity(), R.layout.spinner_item, foodListBasedOnServings);
 //
@@ -331,6 +369,9 @@ public class UserListFragment extends Fragment implements DataTransferInterface 
 //                else {
 //                    getFood(tmpFoodList.get(position).getID());
 //                }
+
+
+
             }
 
 

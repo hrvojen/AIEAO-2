@@ -96,18 +96,21 @@ public class SaveListOfGroceries extends AppCompatActivity  implements View.OnCl
         setContentView(R.layout.activity_save_list_of_groceries);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_save_list);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         setTitle("Select a date: ");
 
+        /*
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        mAppBarLayout = (AppBarLayout) findViewById(R.id.app_bar_save_list);
 
+*/
+        mAppBarLayout = (AppBarLayout) findViewById(R.id.app_bar_save_list);
         spinnerTypeOfMeal=(Spinner)findViewById(R.id.spinnerTypeOfMeal);
         saveListButton=(FloatingActionButton)findViewById(R.id.floatingActionButtonSaveMeal);
 
@@ -211,6 +214,17 @@ public class SaveListOfGroceries extends AppCompatActivity  implements View.OnCl
                 meal.setArrayListOfIngridients(foodList);
 
                 saveMeal(meal);
+
+                Toast.makeText(getApplicationContext(), "Meal saved", Toast.LENGTH_LONG);
+
+                Intent startIntent = new Intent(SaveListOfGroceries.this, MainActivity.class);
+                startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK); // clears all previous activities task
+                finish(); // destroy current activity..
+                startActivity(startIntent); // starts new activity
+
+
+
             }
         });
 
@@ -272,6 +286,10 @@ public class SaveListOfGroceries extends AppCompatActivity  implements View.OnCl
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+
+        if (id == android.R.id.home) {
+            finish();
         }
 
         return super.onOptionsItemSelected(item);

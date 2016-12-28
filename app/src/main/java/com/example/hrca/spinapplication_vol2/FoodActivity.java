@@ -46,7 +46,11 @@ public class FoodActivity extends AppCompatActivity implements SearchFoodFragmen
         setContentView(R.layout.activity_food);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
 
@@ -98,13 +102,17 @@ public class FoodActivity extends AppCompatActivity implements SearchFoodFragmen
             return true;
         }
 
+        if (id == android.R.id.home) {
+            finish();
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
     private void setupViewPager(ViewPager viewPager) {
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new SearchFoodFragment(), "ONE");
-        adapter.addFragment(new UserListFragment(), "TWO");
+        adapter.addFragment(new SearchFoodFragment(), "SEARCH");
+        adapter.addFragment(new UserListFragment(), "USER'S LIST");
         viewPager.setAdapter(adapter);
     }
 
