@@ -27,9 +27,11 @@ dependencies {
     })
 
     //Optional for built-in cards
-    
 
     //Optional for RecyclerView
+    
+
+
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:design:24.2.1'
     compile 'com.android.support:support-v4:24.2.1'
@@ -47,5 +49,8 @@ dependencies {
     compile 'com.github.gabrielemariotti.cards:cardslib-recyclerview:2.1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.jaredrummler:material-spinner:1.1.0'
+    compile 'com.androidplot:androidplot-core:1.4.0'
+    compile 'com.github.medyo:fancybuttons:1.8.3'
+
     testCompile 'junit:junit:4.12'
 }

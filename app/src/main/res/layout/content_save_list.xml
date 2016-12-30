@@ -108,13 +108,14 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:gravity="bottom">
 
             <android.support.design.widget.FloatingActionButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                app:fabSize="mini"
+                app:fabSize="normal"
                 app:srcCompat="@drawable/ic_menu_send"
                 android:id="@+id/floatingActionButtonSaveMeal"
                 android:layout_weight="0.8"
