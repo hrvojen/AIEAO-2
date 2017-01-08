@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity
 
     private SharedPreferences pref;
 
+    FancyButton fancyButton;
+    FancyButton fancyLoginButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,12 +56,12 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        FancyButton fancyButton = new FancyButton(this);
+        fancyButton = new FancyButton(this);
         fancyButton=(FancyButton)findViewById(R.id.btn_search_for_food);
         fancyButton.setIconResource(R.drawable.ic_search_white_24dp);
         fancyButton.setFontIconSize(40);
 
-        FancyButton fancyLoginButton=new FancyButton(this);
+        fancyLoginButton=new FancyButton(this);
         fancyLoginButton=(FancyButton)findViewById(R.id.login_or_register_button);
         fancyButton.setFontIconSize(40);
 
@@ -79,7 +81,31 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        if(pref.getBoolean(Constants.IS_LOGGED_IN,false)){
+            fancyLoginButton.setVisibility(View.INVISIBLE);
+            fancyButton.setVisibility(View.VISIBLE);
+        }
+        else {
+            fancyButton.setVisibility(View.INVISIBLE);
+            fancyLoginButton.setVisibility(View.VISIBLE);
+
+        }
+
         //initFragment();
+    }
+
+    @Override
+    protected void onResume() {
+        if(pref.getBoolean(Constants.IS_LOGGED_IN,false)){
+            fancyLoginButton.setVisibility(View.INVISIBLE);
+            fancyButton.setVisibility(View.VISIBLE);
+        }
+        else {
+            fancyButton.setVisibility(View.INVISIBLE);
+            fancyLoginButton.setVisibility(View.VISIBLE);
+
+        }
+        super.onResume();
     }
 
     @Override

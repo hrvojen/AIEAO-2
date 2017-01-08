@@ -116,7 +116,6 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 app:fabSize="normal"
-                app:srcCompat="@drawable/ic_menu_send"
                 android:id="@+id/floatingActionButtonSaveMeal"
                 android:layout_weight="0.8"
                 android:layout_gravity="bottom|end" />
